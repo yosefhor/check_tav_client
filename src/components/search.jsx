@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Search() {
     const [carNumber, setCarNumber] = useState('');
+    const [isFound, setIsFound] = useState(false);
     const [result, setResult] = useState('');
 
     const handleInputChange = (e) => {
-        setCarNumber(e.target.value)        
+        setCarNumber(e.target.value)
     }
 
     const handlePaste = async () => {
@@ -17,25 +20,47 @@ export default function Search() {
         }
     };
 
-    const handleSubmit = async () => {
+    const handleClear = () => {
+        setCarNumber('');
+        setIsFound(false);
+    };
+
+    const handleClearInput = () => {
+        setCarNumber('');
+    };
+
+    const handleSubmit = () => {
+        if (carNumber.length < 5) {
+            toast.error('מספר הרכב אינו יכול להיות קצר מחמש ספרות!');
+            return;
+        } else if (carNumber.length > 8) {
+            toast.error('מספר הרכב אינו יכול להיות ארוך משמונה ספרות!');
+            return;
+        };
         setResult('');
-        const url = 'https://data.gov.il/api/3/action/datastore_search';
-        try {
-            const response = await fetch(`${url}?resource_id=c8b9f9c8-4612-4068-934f-d4acd2e3c06e&q=${carNumber}`);
-
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-
-            const data = await response.json();
-            setResult(data);
-            console.log(result);
-            // console.log(result.result.records[0]);
-            setCarNumber('')
-        } catch (error) {
-            console.error('There was a problem with your fetch operation:', error);
-        }
+        setIsFound(false);
+        const url = 'https://data.gov.il/api/3/action/datastore_search?resource_id=c8b9f9c8-4612-4068-934f-d4acd2e3c06e&q=';
+        fetch(`${url}${carNumber}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                setIsFound(true);
+                setResult(data);
+                console.log(data);
+            }).catch(error => {
+                console.error('There was a problem with your fetch operation:', error);
+            })
     }
+
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            handleSubmit();
+        }
+    };
 
     return (
         <div className=' container mt-5'>
@@ -45,56 +70,20 @@ export default function Search() {
                     <label className=' form-label fs-4'>מספר הרכב (ללא מקפים):</label>
                     <div className=' input-group'>
                         <button className=' btn btn-outline-primary rounded-end-3 rounded-start-0' type='button' aria-label='Search' onClick={handlePaste}><i className="bi bi-clipboard-check"></i></button>
-                        <input className=' form-control rounded-0' type='number' inputMode='numeric' placeholder='00-000-00' value={carNumber} onChange={handleInputChange}></input>
+                        <input className=' form-control rounded-0 border-end-0 border-start-0 border-primary shadow-none' type='number' inputMode='numeric' placeholder='00-000-00' value={carNumber} onChange={handleInputChange} onKeyDown={handleKeyDown}></input>
+                        <button className=' btn border-primary border-end-0 ' type='button' aria-label='Search' onClick={handleClearInput}><i class="bi bi-x-circle-fill col-1"></i></button>
                         <button className=' btn btn-outline-primary rounded-end-0 rounded-start-3 col-3 col-md-4' type='button' aria-label='Search' onClick={handleSubmit}>בדוק</button>
+                    </div>
+                    <div className='d-flex justify-content-center mt-2'>
+                        <button className=' btn btn-sm btn-outline-secondary' type='button' aria-label='Search' onClick={handleClear}>חיפוש חדש</button>
                     </div>
                 </div>
             </div>
-            {result === 'found' && (<div>
+            {isFound && (<div>
                 <h4>תוצאת חיפוש:</h4>
-                <h4 className=' text-success'>'רכב {result.result.records[0]} זכאי לתו נכה על פי מאגר משרד התחבורה'</h4>
+                <h4 className={`text-${result.result.total === 1 ? 'success' : 'danger'}`}>{`הרכב שמספרו ${result.result.q} ${`${result.result.total === 0 ? 'אינו' : ''}`} זכאי לתו נכה על פי מאגר משרד התחבורה`}</h4>
             </div>)}
-            {result === 'notFound' && (<div>
-                <h4>תוצאת חיפוש:</h4>
-                <h4 className=' text-danger'>'רכב {result.result.records[0]} אינו זכאי לתו נכה על פי מאגר משרד התחבורה'</h4>
-            </div>)}
+            <ToastContainer position="bottom-center" rtl theme="colored"/>
         </div>
     )
 }
-
-
-
-// fetch('https://check-tav-server.onrender.com')
-// if (carNumber.length < 5) {
-//     alert('too short');
-//     return;
-// } else if (carNumber.length > 8) {
-//     alert('too long');
-//     return;
-// }
-// setOriginalCarNumber(carNumber);
-// let fixedCarNumber = carNumber
-
-// switch (true) {
-//     case (carNumber.length === 5):
-//         fixedCarNumber = '000' + carNumber;
-//         break;
-//     case (carNumber.length === 6):
-//         fixedCarNumber = '00' + carNumber;
-//         break;
-//     case (carNumber.length === 7):
-//         fixedCarNumber = '0' + carNumber;
-//         break;
-//     default:
-//         break;
-// }
-// fetch('http://127.0.0.1:3001', {
-//     method: 'POST',
-//     headers: {
-//         'Content-Type': 'application/json'
-//     },
-//     body: JSON.stringify({ carNumber: fixedCarNumber })
-// })
-// .then(response => response.json())
-// .then(data => setResult(data.message))
-// .catch(err => console.error(err))
