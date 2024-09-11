@@ -3,11 +3,33 @@ input[type="number"]::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
+
 /* for Firefox */
 input[type="number"] {
     -moz-appearance: textfield;
 }
 
-body{
+body {
     color: purple;
+}
+
+input::placeholder {
+    color: rgba(0, 0, 0, 0.4) !important;
+}
+
+.result-icon {
+    font-size: clamp(4em, 6vw, 8em) !important;
+}
+
+.purple-border {
+    border-color: purple !important;
+}
+
+.btn-outline-purple {
+    color: purple;
+}
+
+.btn-outline-purple:hover {
+    background-color: purple;
+    color: #fff;
 }
