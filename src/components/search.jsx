@@ -97,7 +97,7 @@ export default function Search() {
                     <div className=' input-group'>
                         <button className=' btn btn-outline-purple rounded-end-3 rounded-start-0 purple-border' type='button' aria-label='Search' onClick={handlePaste}><i className="bi bi-clipboard-check"></i></button>
                         <input ref={inputRef} className=' form-control rounded-0 border-end-0 border-start-0 border-primary shadow-none purple-border' type='text' inputMode='numeric' placeholder='00-000-00' value={carNumber} onChange={handleInputChange} onKeyDown={handleKeyDown}></input>
-                        <button className=' btn border-primary border-end-0 shadow-none purple-border' type='button' aria-label='Search' onClick={handleClear}><i className="bi bi-x-circle-fill col-1"></i></button>
+                        <button className=' btn border-primary border-end-0 shadow-none purple-border' type='button' aria-label='Search' onClick={() => { handleClear() }}><i className="bi bi-x-circle-fill col-1"></i></button>
                         <button className=' btn btn-outline-purple rounded-end-0 rounded-start-3 col-3 col-md-4 shadow-none purple-border' type='button' aria-label='Search' onClick={handleSubmit}>בדוק</button>
                     </div>
                 </div>
@@ -130,7 +130,7 @@ export default function Search() {
                         <button className=' btn btn-outline-secondary mt-3' type='button' aria-label='Search' onClick={() => { handleClear(true) }}>חיפוש חדש</button>
                     </div>
                 </>}
-            <ToastContainer position="bottom-center" rtl newestOnTop theme="colored" role="alert" />
+            <ToastContainer position="bottom-center" rtl newestOnTop theme="colored" role="alert" pauseOnFocusLoss={false}/>
         </div>
     )
 }

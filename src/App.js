@@ -1,10 +1,10 @@
 import './App.css';
-import Search from './components/search';
+import AppRoute from './appRoute';
 
 function App() {
   return (
-    <div className="App">
-      <Search/>
+    <div className="App container">
+      <AppRoute/>
     </div>
   );
 }

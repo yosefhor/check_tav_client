@@ -33,3 +33,8 @@ input::placeholder {
     background-color: purple;
     color: #fff;
 }
+
+#top_center_element {
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+}
