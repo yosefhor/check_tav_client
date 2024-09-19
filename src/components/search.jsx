@@ -137,11 +137,11 @@ export default function Search() {
                     </div>
                     <h3 className={` mb-3 text-${result.records[0] ? 'success' : 'danger'}`}>{`הרכב שמספרו ${result.q} ${`${result.records[0] ? '' : 'אינו'}`} זכאי לתו נכה על פי נתוני משרד התחבורה`}</h3>
                     {result.records[0] &&
-                        <h4 className=' text-success-emphasis'>
-                            <p>
+                        <h5 className=' text-success-emphasis'>
+                            <h4 className=' mb-4 text-decoration-underline'>
                                 <i class="bi bi-info-circle ms-3"></i>
                                 מידע נוסף על הזכאות:
-                            </p>
+                            </h4>
                             <p>
                                 <i class="bi bi-calendar2-date  ms-3"></i>
                                 מועד תחילת הזכאות: {formattedDate}
@@ -161,7 +161,7 @@ export default function Search() {
                                     </Tooltip>
                                 </Overlay>
                             </div>
-                        </h4>
+                        </h5>
                     }
                     <div className='d-flex justify-content-center'>
                         <button className=' btn btn-outline-secondary mt-3' type='button' aria-label='Search' onClick={() => { handleClear(true) }}>חיפוש חדש</button>

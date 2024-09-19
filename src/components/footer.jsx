@@ -8,7 +8,7 @@ export default function Footer() {
     const handleClose = () => setShow(false);
 
     return (
-        <footer className='fixed-bottom bg-white text-center text-body d-inline-flex justify-content-center align-items-center small'>
+        <footer className=' container fixed-bottom bg-white text-center text-body d-inline-flex justify-content-center align-items-center small'>
 
             <Button variant='link' size='sm' onClick={handleShow}>תנאים והגבלות</Button>|
             <div className=' me-2'>תכנון ובניית אתר: <a href='https://www.linkedin.com/in/yossef-horvitz-511786278/'>Yossef Horvitz</a></div>
