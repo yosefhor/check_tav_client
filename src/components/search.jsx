@@ -1,5 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
+import Overlay from 'react-bootstrap/Overlay';
+import Tooltip from 'react-bootstrap/Tooltip';
+import Button from 'react-bootstrap/Button';
 import 'react-toastify/dist/ReactToastify.css';
 
 export default function Search() {
@@ -7,7 +10,13 @@ export default function Search() {
     const [isFound, setIsFound] = useState(false);
     const [result, setResult] = useState('');
     const [formattedDate, setFormattedDate] = useState('');
+    const [showInfo, setShowInfo] = useState(false);
     const inputRef = useRef(null);
+    const additionalInfo = useRef(null);
+
+    const urlAPI = 'https://data.gov.il/api/3/action/datastore_search?resource_id=c8b9f9c8-4612-4068-934f-d4acd2e3c06e&q=';
+    const urlInfo1 = 'https://www.kolzchut.org.il/he/%D7%AA%D7%92_%D7%97%D7%A0%D7%99%D7%94_%D7%9C%D7%A0%D7%9B%D7%94_%D7%95%D7%9C%D7%A7%D7%A8%D7%95%D7%91_%D7%94%D7%9E%D7%A1%D7%99%D7%A2_%D7%91%D7%95%D7%92%D7%A8_%D7%90%D7%95_%D7%99%D7%9C%D7%93_%D7%A0%D7%9B%D7%94';
+    const urlInfo2 = 'https://he.wikisource.org/wiki/%D7%A4%D7%A7%D7%95%D7%93%D7%AA_%D7%94%D7%AA%D7%A2%D7%91%D7%95%D7%A8%D7%94#%D7%A1%D7%A2%D7%99%D7%A3_71%D7%901';
 
     const handleInputChange = (e) => {
         const text = e.target.value;
@@ -46,12 +55,10 @@ export default function Search() {
         checkCar();
     };
 
-    const url = 'https://data.gov.il/api/3/action/datastore_search?resource_id=c8b9f9c8-4612-4068-934f-d4acd2e3c06e&q=';
-
     const checkCar = () => {
         setResult('');
         setIsFound(false);
-        fetch(`${url}${carNumber}`)
+        fetch(`${urlAPI}${carNumber}`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -88,6 +95,25 @@ export default function Search() {
         inputRef.current?.focus();
     }, []);
 
+    const handleClickOutside = (event) => {
+        if (additionalInfo.current && !additionalInfo.current.contains(event.target)) {
+            setShowInfo(false);
+        }
+    };
+
+    useEffect(() => {
+        if (showInfo) {
+            document.addEventListener('mousedown', handleClickOutside);
+        } else {
+            document.removeEventListener('mousedown', handleClickOutside);
+        }
+
+        // ניקוי אחרי הסרת ה-tooltip
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [showInfo]);
+
     return (
         <div className=' container mt-5'>
             <h1 className='text-center'>בדיקת תו נכה לרכב במאגר משרד התחבורה</h1>
@@ -120,17 +146,28 @@ export default function Search() {
                                 <i class="bi bi-calendar2-date  ms-3"></i>
                                 מועד תחילת הזכאות: {formattedDate}
                             </p>
-                            <p>
+                            <div>
                                 <i class="bi bi-arrow-left-circle ms-3"></i>
                                 תו מסוג: {result.records[0]['SUG TAV'] === 1 ? 'תג נכה רגיל (עם משולש ירוק)' : 'תג נכה על כיסא גלגלים (עם מלבן כחול)'}
-                            </p>
+                                <Button className='info-btn' variant='' ref={additionalInfo} onClick={() => { setShowInfo(!showInfo) }}>
+                                    <i class="bi bi-info-circle fs-6 "></i>
+                                </Button>
+                                <Overlay target={additionalInfo} show={showInfo}>
+                                    <Tooltip >
+                                        {result.records[0]['SUG TAV'] === 1 ? 'לא ' : ''}
+                                        כולל זכאות לנסיעה בנת"צ<br />למידע נוסף ראה{' '}
+                                        <a target='blank' href={urlInfo1}>כאן</a>{' '}
+                                        <a target='blank' href={urlInfo2}>וכאן</a>
+                                    </Tooltip>
+                                </Overlay>
+                            </div>
                         </h4>
                     }
                     <div className='d-flex justify-content-center'>
                         <button className=' btn btn-outline-secondary mt-3' type='button' aria-label='Search' onClick={() => { handleClear(true) }}>חיפוש חדש</button>
                     </div>
                 </>}
-            <ToastContainer position="bottom-center" rtl newestOnTop theme="colored" role="alert" pauseOnFocusLoss={false}/>
+            <ToastContainer position="bottom-center" rtl newestOnTop theme="colored" role="alert" pauseOnFocusLoss={false} />
         </div>
     )
 }

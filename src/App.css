@@ -38,3 +38,24 @@ input::placeholder {
     left: 50% !important;
     transform: translateX(-50%) !important;
 }
+
+.info-btn {
+    border: none !important;
+    position: relative !important;
+    top: -10px !important;
+    right: -10px !important;
+}
+
+.tooltip-inner {
+    background-color: white !important;
+    color: #0f5132 !important;
+    border: 1px solid #0f5132 !important;
+}
+
+.tooltip-arrow::before {
+    border-top-color: #0f5132 !important;
+}
+
+.nagishli-trigger-icon {
+    background-color: purple !important;
+}

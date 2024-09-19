@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Search from './components/search';
 import Header from './components/header';
 import NotFound from './components/notFound';
+import Footer from './components/footer';
 
 export default function AppRoute() {
   return (
@@ -12,6 +13,7 @@ export default function AppRoute() {
             <Route path='/' element={<Search/>}/>
             <Route path='*' element={<NotFound/>}/>
         </Routes>
+        <Footer/>
     </Router>
   )
 }
