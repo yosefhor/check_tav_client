@@ -1,3 +1,8 @@
+:root {
+    --custom-purple: #804780;
+    --custom-blue: #1d1e6b;
+}
+
 body {
     padding-bottom: 70px;
 }
@@ -13,8 +18,16 @@ input[type="number"] {
     -moz-appearance: textfield;
 }
 
-body {
-    color: purple;
+.text-purple {
+    color: var(--custom-purple);
+}
+
+.text-blue {
+    color: var(--custom-blue);
+}
+
+.text-danger-custom {
+    color: #a52d39 !important;
 }
 
 input::placeholder {
@@ -22,11 +35,20 @@ input::placeholder {
 }
 
 .result-icon {
-    font-size: clamp(4em, 6vw, 8em) !important;
+    font-size: clamp(4em, 6vw, 8em);
 }
 
 .purple-border {
     border-color: purple !important;
+}
+
+.btn-purple {
+    background-color: var(--custom-purple);
+    color: #fff;
+}
+
+.btn-purple:hover {
+    color: purple;
 }
 
 .btn-outline-purple {
@@ -34,13 +56,23 @@ input::placeholder {
 }
 
 .btn-outline-purple:hover {
-    background-color: purple;
+    background-color: var(--custom-purple);
     color: #fff;
 }
 
-#top_center_element {
-    left: 50% !important;
-    transform: translateX(-50%) !important;
+.btn-clear {
+    color: #726e6e;
+}
+
+.btn-clear:hover {
+    color: black;
+}
+
+#main_logo {
+    color: var(--custom-purple);
+    font-family: 'Pacifico', system-ui;
+    font-style: italic;
+    font-size: clamp(35px, calc(30px + 2vw), 80px);
 }
 
 .info-btn {
@@ -48,6 +80,10 @@ input::placeholder {
     position: relative !important;
     top: -10px !important;
     right: -10px !important;
+}
+
+.tooltip {
+    opacity: 1 !important;
 }
 
 .tooltip-inner {
@@ -62,4 +98,5 @@ input::placeholder {
 
 .nagishli-trigger-icon {
     background-color: purple !important;
+    bottom: 40px !important;
 }

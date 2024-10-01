@@ -1,20 +1,41 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
-import logo from '../logo.webp';
-import writtenLogo from '../writtenLogo.png';
 
 export default function Header() {
+    const navbarCollapseRef = useRef(null);
+
+    const handleLinkClick = () => {
+        if (navbarCollapseRef.current) {
+            navbarCollapseRef.current.classList.remove('show');
+        }
+    };
+
     return (
-        <header className=' sticky-top'>
-            <div className=' d-flex justify-content-end bg-white' style={{ height: '110px' }}>
-                <Link to='/' className=' d-flex align-items-center' >
-                    <img src={writtenLogo} alt='writtenLogo' id='top_center_element' className=' p-4 img-fluid position-absolute' style={{ width: '350px' }}/>
-                </Link>
-                <Link to='/'>
-                    <img src={logo} alt='logo' className=' h-100 img-fluid img-thumbnail d-none d-md-block' />
-                </Link>
+        <header className=' sticky-top bg-white'>
+            <Link to='/' className=' d-flex align-items-center justify-content-center text-decoration-none' style={{ height: 'calc(50px + 3vw)' }}>
+                <h1 id='main_logo'>Tav4you</h1>
+            </Link>
+            <hr className=' rounded border-4 my-0 text-success-emphasis' />
+            <div className="navbar navbar-expand-md bg-body-tertiary">
+                <div className="container-fluid">
+                    <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span className="navbar-toggler-icon"></span>
+                    </button>
+                    <div ref={navbarCollapseRef} className="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul className="navbar-nav">
+                            <li className="nav-item mx-3">
+                                <Link className="nav-link active text-blue" aria-current="page" to='/' onClick={handleLinkClick}>בית</Link>
+                            </li>
+                            <li className="nav-item mx-3">
+                                <Link className="nav-link text-blue" to='/info' onClick={handleLinkClick}>מידע</Link>
+                            </li>
+                            <li className="nav-item mx-3">
+                                <Link className="nav-link text-blue" to='/faq' onClick={handleLinkClick}>שאלות נפוצות</Link>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-            <hr className=' rounded border-4 mt-0' />
         </header>
     )
 }
