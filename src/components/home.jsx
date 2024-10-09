@@ -4,10 +4,12 @@ import Overlay from 'react-bootstrap/Overlay';
 import Tooltip from 'react-bootstrap/Tooltip';
 import Button from 'react-bootstrap/Button';
 import FadeLoader from "react-spinners/FadeLoader";
-import 'react-toastify/dist/ReactToastify.css';
 import { Link } from 'react-router-dom';
+import CheckCar from './checkCar';
+import { addDash } from './addDash';
+import 'react-toastify/dist/ReactToastify.css';
 
-export default function Search() {
+export default function Home() {
     const [carNumber, setCarNumber] = useState('');
     const [fixedCarNumber, setFixedCarNumber] = useState('');
     const [searchHistory, setSearchHistory] = useState([]);
@@ -19,14 +21,15 @@ export default function Search() {
     const [showInfo, setShowInfo] = useState(false);
     const inputRef = useRef(null);
     const additionalInfo = useRef(null);
-
-    const urlAPI = 'https://data.gov.il/api/3/action/datastore_search?resource_id=c8b9f9c8-4612-4068-934f-d4acd2e3c06e&q=';
+    const { checkCar } = CheckCar({ setIsFetching, carNumber, setResultCarNumber, setIsFound, setResult, setFormattedDate });
 
     const handleInputChange = (e) => {
         const text = e.target.value;
         if (text.length <= 10) {
-            setCarNumber(text.replace(/\D/g, ''));
-            setFixedCarNumber(addDashToNum(text.replace(/\D/g, '')))
+            const numOnly = text.replace(/\D/g, '');
+            setCarNumber(numOnly);
+            const formattedNumber = addDash(numOnly);
+            setFixedCarNumber(formattedNumber);
         };
     };
 
@@ -37,7 +40,8 @@ export default function Search() {
             const numOnly = text.replace(/\D/g, '');
             if (numOnly.length <= 8) {
                 setCarNumber(numOnly);
-                setFixedCarNumber(addDashToNum(numOnly));
+                const formattedNumber = addDash(numOnly);
+                setFixedCarNumber(formattedNumber);
             };
         } catch (error) {
             console.error('Error reading clipboard:', error);
@@ -71,41 +75,6 @@ export default function Search() {
         checkCar();
     };
 
-    const checkCar = async () => {
-        try {
-            setIsFetching(true);
-            const response = await fetch(`${urlAPI}${carNumber}`);
-            if (!response.ok) throw new Error('Network response was not ok');
-            const data = await response.json();
-            handleData(data);
-        } catch (error) {
-            handleError(error);
-        } finally {
-            setIsFetching(false);
-        }
-    };
-
-    const handleData = (data) => {
-        const modifiedQueryNum = addDashToNum(data.result.q);
-        setResultCarNumber(modifiedQueryNum);
-        setIsFound(true);
-        setResult(data.result);
-        if (data.result.records[0]) {
-            const stringDate = data.result.records[0]['TAARICH HAFAKAT TAG'].toString();
-            if (stringDate.length === 8) {
-                setFormattedDate(`${stringDate.slice(6)}/${stringDate.slice(4, 6)}/${stringDate.slice(0, 4)}`);
-            }
-        }
-    };
-
-    const handleError = (error) => {
-        const message = error.message === 'Network response was not ok'
-            ? 'שגיאה בשרת הנתונים, נסה שוב מאוחר יותר.'
-            : 'שגיאה בלתי צפויה, בדוק את החיבור או נסה שוב.';
-        toast.error(message);
-        console.error('Fetch error:', error);
-    };
-
     const saveToHistory = (newSearch) => {
         const alreadyExist = searchHistory.find(num => num === newSearch);
         if (!alreadyExist) {
@@ -113,14 +82,6 @@ export default function Search() {
             localStorage.setItem('searchHistory', JSON.stringify(updatedHistory));
             setSearchHistory(updatedHistory);
         }
-    };
-
-    const addDashToNum = (queryNum) => {
-        const formats = {
-            5: [2], 6: [3], 7: [2, 6], 8: [3, 6]
-        };
-        const splitIndexes = formats[queryNum.length];
-        return splitIndexes ? splitIndexes.reduce((str, i) => str.slice(0, i) + '-' + str.slice(i), queryNum) : queryNum;
     };
 
     const handleKeyDown = (e) => {

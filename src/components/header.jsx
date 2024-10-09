@@ -8,6 +8,7 @@ export default function Header() {
         if (navbarCollapseRef.current) {
             navbarCollapseRef.current.classList.remove('show');
         }
+        window.scrollTo(0,0);
     };
 
     return (

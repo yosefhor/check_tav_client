@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Search from './components/search';
+import Home from './components/home';
 import Header from './components/header';
 import Info from './components/info';
 import FAQ from './components/faq';
@@ -12,7 +12,7 @@ export default function AppRoute() {
     <Router>
       <Header />
       <Routes>
-        <Route path='/' element={<Search />} />
+        <Route path='/' element={<Home />} />
         <Route path='/info' element={<Info />} />
         <Route path='/faq' element={<FAQ />} />
         <Route path='*' element={<NotFound />} />
