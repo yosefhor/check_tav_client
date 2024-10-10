@@ -1,8 +1,7 @@
-import React from 'react';
 import {addDash} from './addDash';
 import { toast } from 'react-toastify';
 
-export default function CheckCar({ setIsFetching, carNumber, setResultCarNumber, setIsFound, setResult, setFormattedDate }) {
+export const CheckCar = ({ setIsFetching, carNumber, setResultCarNumber, setIsFound, setResult, setFormattedDate }) => {
     const urlAPI = 'https://data.gov.il/api/3/action/datastore_search?resource_id=c8b9f9c8-4612-4068-934f-d4acd2e3c06e&q=';
 
     const checkCar = async () => {
@@ -18,9 +17,9 @@ export default function CheckCar({ setIsFetching, carNumber, setResultCarNumber,
             setIsFetching(false);
         }
     };
-
+    
     const handleData = (data) => {
-        const modifiedQueryNum = {addDash}(data.result.q);
+        const modifiedQueryNum = addDash(data.result.q);
         setResultCarNumber(modifiedQueryNum);
         setIsFound(true);
         setResult(data.result);
@@ -40,9 +39,5 @@ export default function CheckCar({ setIsFetching, carNumber, setResultCarNumber,
         console.error('Fetch error:', error);
     };
 
-    return (
-        <div>
-            <button onClick={checkCar}>בדוק רכב</button>
-        </div>
-    );
+    return {checkCar};
 }

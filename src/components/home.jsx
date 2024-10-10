@@ -5,7 +5,7 @@ import Tooltip from 'react-bootstrap/Tooltip';
 import Button from 'react-bootstrap/Button';
 import FadeLoader from "react-spinners/FadeLoader";
 import { Link } from 'react-router-dom';
-import CheckCar from './checkCar';
+import {CheckCar} from './checkCar';
 import { addDash } from './addDash';
 import 'react-toastify/dist/ReactToastify.css';
 
