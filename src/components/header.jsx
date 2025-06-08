@@ -14,7 +14,7 @@ export default function Header() {
     return (
         <header className=' sticky-top bg-white'>
             <Link to='/' className=' d-flex align-items-center justify-content-center text-decoration-none' style={{ height: 'calc(50px + 3vw)' }}>
-                <h1 id='main_logo'>Tav4you</h1>
+                <h1 id='main_logo'>Tav4you5</h1>
             </Link>
             <hr className=' rounded border-4 my-0 text-success-emphasis' />
             <div className="navbar navbar-expand-md bg-body-tertiary">
